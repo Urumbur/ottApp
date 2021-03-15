@@ -2,24 +2,15 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import  SplashScreen from './components/SplashScreen';
 import HomePage from "./components/HomePage";
+import {fetchTokenAPI} from "./utils";
+import { Box } from "@material-ui/core";
 
 const App = () => {
     const [open, setOpen] = useState(true);
-    const [videoList, setVideoList] = useState(null);
-
-
-    const requestOptions = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    }
+    const [token, setToken] = useState('');
 
     useEffect(() => {
-        fetch("https://thebetter.bsgroup.eu/Authorization/SignIn", requestOptions)
-            .then(res => res.json())
-            .then(result => console.log(result))
-            .catch(e => console.log(e));
+        fetchTokenAPI().then(res => setToken(res))
     }, []);
 
     const handleClick = () => {
@@ -27,13 +18,13 @@ const App = () => {
     }
 
     return (
-      <div>
+      <Box>
           {open ?
             <SplashScreen nextPage={handleClick}/>
           :
-            <HomePage videoList={videoList}/>
+            <HomePage token={token}/>
           }
-      </div>
+      </Box>
     );
 }
 
